@@ -95,11 +95,11 @@ export default function PostForm({ post }) {
 	}, [watch, slugTransform, setValue]);
 
 	return (
-		<Container>
+		<>
 			<form
 				onSubmit={handleSubmit(submit)}
 				className="flex flex-wrap text-blue-200 mt-2 relative pb-14">
-				<div className="lg:w-2/5 md:w-1/2 w-full sm:px-2 ">
+				<div className="lg:w-2/5 md:w-1/2 w-full sm:pr-2 ">
 					<div className="">
 						<Input
 							label="Title"
@@ -156,13 +156,13 @@ export default function PostForm({ post }) {
 				</div> */}
 			</form>
 			{isLoading && (
-				<div className="fixed top-0 left-0 z-50 w-full h-full flex justify-center items-center bg-opacity-50 bg-gray-800">
+				<div className="fixed top-0 left-0 z-50 w-full cursor-progress h-full flex justify-center items-center bg-opacity-50 bg-gray-800">
 					<div className="loader"></div>
 					<p className="ml-2 text-gray-200">
 						This may take a moment, please wait...
 					</p>
 				</div>
 			)}
-		</Container>
+		</>
 	);
 }

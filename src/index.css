@@ -1,3 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Global Background: Light cool grey */
+    --background: 210 20% 96%; /* #F3F4F6 */
+
+    /* Typography: Dark grey for better readability */
+    --foreground: 215 16% 27%; /* #374151 */
+
+    /* Card Background: Pure White */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 215 16% 27%; /* #374151 */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 16% 27%;
+
+    /* Brand Color: Indigo/Purple */
+    --primary: 243 75% 59%; /* #6366f1 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    /* Muted Text: Medium grey */
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Borders: Light grey */
+    --border: 220 13% 91%; /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 243 75% 59%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 265 40% 5%;
+    --foreground: 265 10% 98%;
+
+    --card: 265 40% 6%;
+    --card-foreground: 265 10% 98%;
+
+    --popover: 265 40% 5%;
+    --popover-foreground: 265 10% 98%;
+
+    --primary: 265 80% 60%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 265 30% 15%;
+    --secondary-foreground: 265 10% 98%;
+
+    --muted: 265 30% 15%;
+    --muted-foreground: 265 10% 65%;
+
+    --accent: 265 30% 15%;
+    --accent-foreground: 265 10% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 265 30% 15%;
+    --input: 265 30% 15%;
+    --ring: 265 80% 60%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: "Outfit", sans-serif;
+  }
+}

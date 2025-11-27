@@ -3,8 +3,8 @@ import { Container, PostForm } from "../components/index";
 
 function AddPost() {
 	return (
-		<div className="py-8 min-h-[calc(100vh-150px)]">
-			<Container>
+		<div className="py-8 min-h-[calc(100vh-150px)] w-[80vw] mx-auto">
+			<>
 				<div className="sm:mb-10 mb-5 w-full">
 					<span className="text-[#9ca3af] font-semibold text-3xl tracking-widest mx-auto">
 						ADD POST{" "}
@@ -16,7 +16,7 @@ function AddPost() {
 					</span>
 				</div>
 				<PostForm />
-			</Container>
+			</>
 		</div>
 	);
 }

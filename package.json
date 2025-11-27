@@ -1,5 +1,5 @@
 {
-  "name": "10megablog",
+  "name": "lumina",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,8 +20,10 @@
     "appwrite": "^14.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
     "hamburger-react": "^2.5.0",
     "html-react-parser": "^5.1.8",
+    "lucide-react": "^0.555.0",
     "node-appwrite": "^12.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

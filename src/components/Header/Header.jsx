@@ -1,128 +1,172 @@
-import React, { useEffect, useState } from "react";
-import { Container, Logo, LogoutBtn } from "../index";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Container, Logo, LogoutBtn, ThemeToggle } from "../index";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Button as antButton, Drawer } from "antd";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
+  const user = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
-
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    {
-      name: "Home",
-      slug: "/",
-      active: true,
-    },
-    {
-      name: "Login",
-      slug: "/login",
-      active: !authStatus,
-    },
-    {
-      name: "Signup",
-      slug: "/signup",
-      active: !authStatus,
-    },
-    {
-      name: "All Posts",
-      slug: "/all-posts",
-      active: authStatus,
-    },
-    {
-      name: "Add Post",
-      slug: "/add-post",
-      active: authStatus,
-    },
+    { name: "Home", slug: "/", active: true },
+    { name: "Login", slug: "/login", active: !authStatus },
+    { name: "Signup", slug: "/signup", active: !authStatus },
+    { name: "All Posts", slug: "/all-posts", active: authStatus },
+    { name: "Add Post", slug: "/add-post", active: authStatus },
   ];
 
   return (
-    <header className="w-full flex text-gray-400 font-semibold h-20 border-b-[1px] border-gray-400">
-      <div className="w-full md:w-[90vw] sm:mx-auto md:px-4 px-2  text-lg">
-        <nav className="flex justify-between items-center px-4 sm:px-0">
-          <h1 className="pt-6">TITLE</h1>
-          <ul className="flex relative">
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="sticky top-0 z-50 w-full border-b border-border bg-card/80 backdrop-blur-md supports-[backdrop-filter]:bg-card/60"
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          <Link to="/" className="flex items-center space-x-2">
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+              Lumina
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
             {navItems.map((item) =>
-              item.active
-                ? innerWidth > 400 && (
-                    <li key={item.name} className="">
-                      <NavLink
-                        to={item.slug}
-                        className={({ isActive }) =>
-                          `block py-2 ${
-                            isActive ? "text-blue-300 " : "text-gray-500"
-                          } sm:pt-6 pt-3 sm:px-5 px-3 md:mr-4 duration-200 hover:border-t-2 hover:border-t-blue-300 text-xl`
-                        }
-                        // className="px-6 py-2 duration-200 hover:text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-500 rounded-full"
-                      >
-                        {item.name}
-                      </NavLink>
-                    </li>
-                  )
-                : null
+              item.active ? (
+                <NavLink
+                  key={item.name}
+                  to={item.slug}
+                  className={({ isActive }) =>
+                    `text-sm font-medium transition-colors hover:text-primary ${
+                      isActive ? "text-primary" : "text-muted-foreground"
+                    }`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              ) : null
             )}
-            <Drawer width={250} title="" onClose={onClose} open={open}>
+            <ThemeToggle />
+            {authStatus && (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-muted-foreground">
+                  {user?.name}
+                </span>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button className="text-sm font-medium text-destructive hover:text-destructive/80 transition-colors">
+                      Logout
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you sure you want to logout?
+                      </AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction asChild>
+                        <LogoutBtn className="bg-destructive text-destructive-foreground hover:bg-destructive/90" />
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-muted-foreground hover:text-primary"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-white/10 bg-background"
+          >
+            <div className="container py-4 space-y-4">
               {navItems.map((item) =>
-                item.active && innerWidth < 400 ? (
-                  <li
-                    key={item.slug}
-                    className="flex items-start border-b-2 border-gray-500">
-                    <NavLink
-                      to={item.slug}
-                      onClick={() => {
-                        onClose();
-                      }}
-                      className={({ isActive }) =>
-                        `block py-2 ${
-                          isActive
-                            ? "text-gray-700 bg-blue-200 "
-                            : "text-blue-100"
-                        } duration-200 lg:border-0 lg:p-0 w-full text-left px-6 py-2  `
-                      }
-                      // className="px-6 py-2 duration-200 w-full text-left  "
-                    >
-                      {item.name}
-                    </NavLink>
-                  </li>
+                item.active ? (
+                  <NavLink
+                    key={item.name}
+                    to={item.slug}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `block text-sm font-medium transition-colors hover:text-primary ${
+                        isActive ? "text-primary" : "text-muted-foreground"
+                      }`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
                 ) : null
               )}
-              {authStatus && (
-                <li className="absolute w-full items-start list-none bottom-0 mb-4">
-                  <LogoutBtn className="px-8 py-1 text-white font-semibold text-lg bg-red-600 hover:bg-red-700 rounded-xl text-center " />
-                </li>
-              )}
-            </Drawer>
-
-            {innerWidth <= 400 ? (
-              <div className="pt-6">
-                <antButton type="primary" onClick={showDrawer}>
-                  Menu
-                </antButton>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Theme
+                </span>
+                <ThemeToggle />
               </div>
-            ) : (
-              authStatus && (
-                <div className=" sm:pt-4 pt-1.5 sm:pl-0 px-2  hover:border-t-2 hover:border-t-blue-300 ">
-                  <LogoutBtn
-                    className={
-                      "text-gray-500 pl-2 text-xl hover:bg-none hover:text-red-600"
-                    }
-                  />
+              {authStatus && (
+                <div className="pt-4 border-t border-white/10">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-sm font-medium text-muted-foreground">
+                      {user?.name}
+                    </span>
+                  </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button className="w-full text-left text-sm font-medium text-destructive hover:text-destructive/80 transition-colors">
+                        Logout
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you sure you want to logout?
+                        </AlertDialogTitle>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction asChild>
+                          <LogoutBtn className="bg-destructive text-destructive-foreground hover:bg-destructive/90" />
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
-              )
-            )}
-          </ul>
-        </nav>
-      </div>
-    </header>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }
 

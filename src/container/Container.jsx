@@ -9,7 +9,7 @@
 import React from 'react'
 
 function Container({children}) {
-  return <div className='w-full max-w-[90vw] mx-auto px-2'>{children}</div>;
+  return <div className='relative w-full max-w-[90vw] mx-auto px-2'>{children}</div>;
   
 }
 
